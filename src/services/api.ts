@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://109.73.206.144:6969";
+// Use Vercel API route as proxy to avoid CORS issues
+const API_BASE_URL = "/api/proxy";
+
 const API_KEY = "E6kUTYrYwZq2tN4QEtyzsbEBk3ie";
 
 const api = axios.create({
@@ -127,25 +129,25 @@ const buildQueryString = (params: ApiParams): string => {
 export const apiService = {
   async getSales(params: ApiParams = {}): Promise<ApiResponse<SalesItem>> {
     const queryString = buildQueryString(params);
-    const response = await api.get(`/api/sales?${queryString}`);
+    const response = await api.get(`?path=sales&${queryString}`);
     return response.data;
   },
 
   async getOrders(params: ApiParams = {}): Promise<ApiResponse<OrderItem>> {
     const queryString = buildQueryString(params);
-    const response = await api.get(`/api/orders?${queryString}`);
+    const response = await api.get(`?path=orders&${queryString}`);
     return response.data;
   },
 
   async getStocks(params: ApiParams = {}): Promise<ApiResponse<StockItem>> {
     const queryString = buildQueryString(params);
-    const response = await api.get(`/api/stocks?${queryString}`);
+    const response = await api.get(`?path=stocks&${queryString}`);
     return response.data;
   },
 
   async getIncomes(params: ApiParams = {}): Promise<ApiResponse<IncomeItem>> {
     const queryString = buildQueryString(params);
-    const response = await api.get(`/api/incomes?${queryString}`);
+    const response = await api.get(`?path=incomes&${queryString}`);
     return response.data;
   },
 };
