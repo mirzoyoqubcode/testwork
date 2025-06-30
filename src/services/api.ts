@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Use Vercel API route as proxy to avoid CORS issues
-const API_BASE_URL = "/api/proxy";
+// Try HTTP proxy first to avoid SSL issues
+const API_BASE_URL = "/api/proxy-http";
 
 const API_KEY = "E6kUTYrYwZq2tN4QEtyzsbEBk3ie";
 

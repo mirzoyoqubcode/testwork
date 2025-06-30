@@ -1,22 +1,16 @@
 import axios from "axios";
-import https from "https";
 
-const API_BASE_URL = "https://109.73.206.144:6969";
+const API_BASE_URL = "http://109.73.206.144:6969"; // Try HTTP instead of HTTPS
 const API_KEY = "E6kUTYrYwZq2tN4QEtyzsbEBk3ie";
 
-// Create axios instance with SSL configuration
+// Create axios instance for HTTP
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
-  httpsAgent: new https.Agent({
-    rejectUnauthorized: false, // Allow self-signed certificates
-    secureProtocol: "TLSv1_2_method", // Use TLS 1.2
-    ciphers: "ALL" // Allow all ciphers
-  }),
+  timeout: 15000, // Increased timeout
   headers: {
     "Content-Type": "application/json",
-    "User-Agent": "Vercel-Proxy/1.0"
-  }
+    "User-Agent": "Vercel-Proxy/1.0",
+  },
 });
 
 export default async function handler(req, res) {
@@ -44,7 +38,9 @@ export default async function handler(req, res) {
     const params = new URLSearchParams(queryParams);
     params.append("key", API_KEY);
 
-    console.log(`Making request to: ${API_BASE_URL}${targetUrl}?${params.toString()}`);
+    console.log(
+      `Making HTTP request to: ${API_BASE_URL}${targetUrl}?${params.toString()}`
+    );
 
     // Make request to backend
     const response = await api.get(`${targetUrl}?${params.toString()}`);
@@ -52,18 +48,18 @@ export default async function handler(req, res) {
     // Return the response data
     res.status(200).json(response.data);
   } catch (error) {
-    console.error("Proxy error details:", {
+    console.error("HTTP Proxy error details:", {
       message: error.message,
       code: error.code,
       response: error.response?.data,
-      status: error.response?.status
+      status: error.response?.status,
     });
 
     res.status(error.response?.status || 500).json({
-      error: "Proxy request failed",
+      error: "HTTP Proxy request failed",
       message: error.message,
       code: error.code,
-      details: error.response?.data || "No additional details"
+      details: error.response?.data || "No additional details",
     });
   }
 }
